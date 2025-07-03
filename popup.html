@@ -1,19 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Form Filler</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edge Form Filler</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 10px; width: 300px; }
-    textarea { width: 100%; height: 60px; margin-bottom: 8px; }
-    button { width: 100%; padding: 8px; margin-bottom: 8px; }
+    :root {
+      --primary: #34495e;
+      --secondary: #2980b9;
+      --background: #f5f6fa;
+      --text: #2c3e50;
+      --btn-text: #ffffff;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      width: 320px;
+      overflow: hidden;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background: var(--primary);
+      color: var(--btn-text);
+      padding: 12px;
+      text-align: center;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      padding: 16px;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 8px;
+      border: 1px solid #bdc3c7;
+      border-radius: 4px;
+      resize: vertical;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #saveKey {
+      background: var(--secondary);
+      color: var(--btn-text);
+    }
+    #saveKey:hover {
+      background: #2471a3;
+    }
+    #fill {
+      background: var(--primary);
+      color: var(--btn-text);
+    }
+    #fill:hover {
+      background: #2c3e50;
+    }
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #7f8c8d;
+      padding: 8px;
+    }
   </style>
 </head>
 <body>
-  <h2>Form Filler</h2>
-  <textarea id="apiKey" placeholder="Enter OpenAI API Key"></textarea>
-  <button id="saveKey">Save API Key</button>
-  <button id="fill">Fill Current Form</button>
+  <div class="container">
+    <header>
+      <h1>Edge Form Filler</h1>
+    </header>
+    <main>
+      <div class="input-group">
+        <textarea id="apiKey" placeholder="Enter your OpenAI API Key"></textarea>
+      </div>
+      <button id="saveKey">Save API Key</button>
+      <button id="fill">Fill Current Form</button>
+    </main>
+    <footer>
+      &copy; 2025 Edge Form Filler
+    </footer>
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
