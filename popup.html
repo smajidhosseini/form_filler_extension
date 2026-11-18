@@ -1,112 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edge Form Filler</title>
-  <style>
-    :root {
-      --primary: #34495e;
-      --secondary: #2980b9;
-      --background: #f5f6fa;
-      --text: #2c3e50;
-      --btn-text: #ffffff;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: var(--background);
-      color: var(--text);
-      width: 320px;
-      overflow: hidden;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      background: var(--primary);
-      color: var(--btn-text);
-      padding: 12px;
-      text-align: center;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-    header h1 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-    main {
-      flex: 1;
-      padding: 16px;
-    }
-    .input-group {
-      margin-bottom: 16px;
-    }
-    textarea {
-      width: 100%;
-      height: 80px;
-      padding: 8px;
-      border: 1px solid #bdc3c7;
-      border-radius: 4px;
-      resize: vertical;
-      font-size: 14px;
-      font-family: inherit;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    #saveKey {
-      background: var(--secondary);
-      color: var(--btn-text);
-    }
-    #saveKey:hover {
-      background: #2471a3;
-    }
-    #fill {
-      background: var(--primary);
-      color: var(--btn-text);
-    }
-    #fill:hover {
-      background: #2c3e50;
-    }
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: #7f8c8d;
-      padding: 8px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Edge Form Filler</h1>
-    </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Application Assistant</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
     <main>
-      <div class="input-group">
-        <textarea id="apiKey" placeholder="Enter your OpenAI API Key"></textarea>
-      </div>
-      <button id="saveKey">Save API Key</button>
-      <button id="fill">Fill Current Form</button>
+      <header>
+        <div class="mark">JA</div>
+        <div>
+          <h1>Application Assistant</h1>
+          <p>Resume-aware help for the current page</p>
+        </div>
+      </header>
+
+      <section class="card actions" aria-label="Actions">
+        <button id="experience" class="actionButton primary"><span class="number">W</span><span class="buttonCopy"><strong>Add work experience</strong><small>Fill repeating Workday experience entries</small></span><span class="arrow">→</span></button>
+        <button id="fill" class="actionButton primary"><span class="number">01</span><span class="buttonCopy"><strong>Fill forms</strong><small>Complete supported fields</small></span><span class="arrow">→</span></button>
+        <button id="upload" class="actionButton"><span class="number">02</span><span class="buttonCopy"><strong>Upload resume</strong><small>Attach your CV to this page</small></span><span class="arrow">→</span></button>
+        <button id="cover" class="actionButton"><span class="number">03</span><span class="buttonCopy"><strong>Generate cover letter</strong><small>Tailored to this opportunity</small></span><span class="arrow">→</span></button>
+        <button id="match" class="actionButton matchButton"><span class="number">04</span><span class="buttonCopy"><strong>Check job match</strong><small>Honest resume-to-role fit</small></span><span class="arrow">→</span></button>
+        <button id="api" class="actionButton"><span class="number">05</span><span class="buttonCopy"><strong>Update API key</strong><small>Manage your OpenAI connection</small></span><span class="arrow">→</span></button>
+      </section>
+
+      <section id="apiPanel" class="card hidden">
+        <label for="apiKey">OpenAI API key</label>
+        <div class="keyRow">
+          <input id="apiKey" type="password" autocomplete="off" placeholder="sk-…" />
+          <button id="saveKey" class="compact">Save</button>
+        </div>
+        <p class="hint">Stored locally in this Chrome profile. For personal use only.</p>
+      </section>
+
+      <section id="resultPanel" class="card hidden">
+        <div class="resultHead">
+          <label id="resultLabel" for="result">Result</label>
+          <div>
+            <button id="copy" class="compact">Copy</button>
+            <button id="download" class="compact">Download</button>
+          </div>
+        </div>
+        <textarea id="result" rows="12"></textarea>
+      </section>
+
+      <section id="matchPanel" class="card matchPanel hidden">
+        <div class="matchHero">
+          <div id="matchRing" class="matchRing" style="--score: 0">
+            <div class="ringCore"><strong id="matchScore">0%</strong><span>job fit</span></div>
+          </div>
+          <div class="matchSummary">
+            <span id="matchLevel" class="levelPill">Assessment</span>
+            <h2 id="matchVerdict">Analyzing your fit…</h2>
+          </div>
+        </div>
+        <div class="matchGrid">
+          <article class="matchDetail strengthDetail"><h3>Strong matches</h3><ul id="matchStrengths"></ul></article>
+          <article class="matchDetail gapDetail"><h3>Important gaps</h3><ul id="matchGaps"></ul></article>
+        </div>
+        <article class="recommendation"><span>Recommendation</span><p id="matchRecommendation"></p></article>
+        <p class="estimateNote">Fit estimate based on the resume and job requirements—not a hiring probability.</p>
+      </section>
+
+      <div id="status" role="status" aria-live="polite">Ready</div>
     </main>
-    <footer>
-      &copy; 2025 Edge Form Filler
-    </footer>
-  </div>
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

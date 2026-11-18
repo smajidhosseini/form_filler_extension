@@ -1,70 +1,41 @@
-# Microsot Edge Froms Filler Extension
+# Job Application Assistant
 
-Edge Form Filler is a Chrome/Edge extension that automatically fills web forms using data extracted from your LaTeX CV (`cv.tex`) and the OpenAI API.
+## Version 2 — Workday work experience
 
-## Features
+Load this `form_filler_extension` folder as an unpacked extension. Disable any older installed copy to avoid duplicate content scripts. Add your own resume as `cv.pdf` (recommended) or `cv.tex`; personal resumes and API keys are not included. Enter your API key through the extension popup.
 
-- **Automatic Form Detection**: Scans all `<input>`, `<textarea>`, and `<select>` elements on any web page to build a form schema.
-- **CV-Based Data Source**: Bundles your CV in LaTeX format (`cv.tex`) to provide consistent personal data.
-- **AI-Powered Mapping**: Uses OpenAI’s Chat Completions API (`gpt-4o-mini`) to extract and match CV data to each form field.
-- **Privacy-Focused**: Stores your API key locally in Chrome storage; no data is logged externally except API requests you initiate.
+On a Workday application's **My Experience** step, expand **Work Experience**, then click **Add work experience**. Keep the popup open while your resume is processed. The extension adds rows with the section's Add button and fills title, employer, location, description, month/year dates, and explicit current-employment status. Review the results before continuing. Use **Fill forms** for the remaining ordinary fields.
 
-## Installation
+Existing values are preserved. Matching employer/title/start-year entries are reused on repeat runs. Unknown months remain blank. Unsupported controls are reported for manual review. This adapter targets English Workday forms in the main page; tenant-specific layouts, custom dropdowns, and embedded frames may require manual completion. It does not click Next or Submit.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/smajidhosseini/edge-form-filler.git
-   cd edge-form-filler
-   ```
-2. **Load as an unpacked extension**:
-   - Open Edge (or Chrome) and go to `edge://extensions/` (or `chrome://extensions/`).
-   - Enable **Developer mode**.
-   - Click **Load unpacked** and select the project folder.
+The work-history extraction sends the resume to OpenAI. Browser fixture tests cover adding rows, filling dates, and repeat-run duplicate prevention; live tenant compatibility is not yet verified.
 
-## Configuration
+A personal Chrome extension that reads the current job page, uses your resume with the OpenAI Responses API, fills supported form fields, attaches your resume, drafts a cover letter, and gives a candid resume-to-job match review.
 
-1. Click the **Edge Form Filler** icon in the browser toolbar.
-2. In the popup, paste your OpenAI API key and click **Save API Key**.
-3. Ensure you have network access to `https://api.openai.com`.
+## Install
 
-## Usage
+1. Copy your resume into this folder as `cv.pdf` (recommended) or `cv.tex`.
+2. Open `chrome://extensions` in Chrome.
+3. Turn on **Developer mode**.
+4. Click **Load unpacked** and select this `form_filler_extension` folder.
+5. Pin the extension, open it, and use **Update API key** to save your OpenAI API key.
 
-1. Navigate to any webpage containing a form (login, contact, application, etc.).
-2. Click the **Edge Form Filler** extension icon.
-3. Click **Fill Current Form**.
-4. The extension will:
-   - Extract the form structure via `content.js`.
-   - Request matching values from the OpenAI API in `background.js`.
-   - Populate the form fields with the returned data.
+If you replace the resume later, return to `chrome://extensions` and click the extension's reload button.
 
-## File Structure
+## Use
 
-```
-├── background.js    # Service worker handling OpenAI API calls
-├── content.js       # Content script to read and fill form fields
-├── popup.html       # Popup UI for API key entry and action buttons
-├── popup.js         # Popup logic for saving API key and triggering form fill
-├── cv.tex           # LaTeX CV file used as the data source
-└── manifest.json    # Extension metadata and permissions
-```
+- **Fill forms** reads visible fields and asks the model for resume-supported answers.
+- **Upload resume** attaches `cv.pdf` or `cv.tex` to the first resume/CV file input it finds.
+- **Generate cover letter** drafts a letter using the page's job description and displays it for copying or download.
+- **Check job match** gives a concise review, a resume-to-requirements fit score, the strongest matches, important gaps, and an apply/don't-prioritize recommendation. The score is not a hiring probability.
+- **Update API key** changes the key saved in Chrome local storage.
 
-## Development & Debugging
+The extension never submits an application. Always review every answer, attachment, and generated letter before submitting.
 
-- The extension uses **Manifest V3** and a service worker (`background.js`).
-- Model and endpoint are configurable in `background.js` (default: `gpt-4o-mini`).
-- Permissions required: `storage`, `activeTab`, `scripting`, and `<all_urls>` host permission.
-- To debug:
-  - Check **Service Worker** logs in the **Extensions** page.
-  - Check **Console** logs on the active tab for `content.js` messages.
+## Privacy and limitations
 
-## Contributing
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/YourFeature`.
-3. Commit your changes: `git commit -m "Add YourFeature"`.
-4. Push to your fork: `git push origin feature/YourFeature`.
-5. Open a Pull Request.
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+- Your API key is stored in `chrome.storage.local`. This is convenient for a personal unpacked extension, but a production extension should call a backend so the key is not distributed to clients.
+- The current page text, field descriptions, and resume are sent to the OpenAI API when generating answers or a cover letter.
+- The temporary resume file uploaded to OpenAI is deleted after each request on a best-effort basis.
+- Browser security prevents automatic file uploads on some sites, and custom/iframe-based forms may need site-specific support.
+- The assistant skips unsupported, sensitive, demographic, legal-attestation, password, CAPTCHA, and signature answers rather than guessing.

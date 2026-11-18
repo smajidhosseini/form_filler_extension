@@ -1,0 +1,8 @@
+cv.pdf
+cv.tex
+Resume.tex
+*.pdf
+.env
+.env.*
+.DS_Store
+node_modules/
