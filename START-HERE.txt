@@ -1,0 +1,19 @@
+JOB APPLICATION ASSISTANT — QUICK SETUP
+
+1. Keep this extracted folder in Documents or another permanent location.
+2. Copy your PDF resume into this folder and name it cv.pdf.
+3. In Chrome, paste chrome://extensions into the address bar.
+   In Edge, paste edge://extensions instead.
+4. Turn on Developer mode. Click Load unpacked. Select THIS folder
+   (containing manifest.json), not the ZIP file.
+5. Pin the extension from your browser's Extensions menu.
+6. Open the extension, click Update API key, paste your OpenAI API
+   key, and Save. Get a key at https://platform.openai.com/api-keys
+7. Refresh your job application page and use the extension buttons.
+
+Keep the popup open while it works. Review answers before submitting.
+API usage may incur charges. Your ChatGPT password is not an API key.
+Do not delete or move this folder after installing the extension.
+
+Full instructions and troubleshooting:
+https://github.com/smajidhosseini/form_filler_extension#readme
